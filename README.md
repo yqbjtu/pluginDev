@@ -1,0 +1,2 @@
+# quickcd plugin
+现在初步设定运行jar文件的时候第一个参数表示的是input属性的文件

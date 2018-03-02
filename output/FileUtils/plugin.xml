@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin id="com.quickcd.plugin.FileUtils" name="FileUtils" version="1">
+<head>
+    <description>
+     a java type plugin to create file or folder 
+    </description>
+</head>
+
+<body>
+    <step name="create a file">
+      <description>execute the file-creation script</description>
+      <properties>
+        <property name="filename" label = "File Name" type="input" defaultValue="file1.txt" description="The name of the file."/>
+        <property name="content" label = "Content" type="input" description="The content of the file."/>
+      </properties>
+      <execution type="java">
+          <arg value="-cp"/>
+          <arg path="lib/log4j.jar;lib/commons-lang3.jar;lib/fileUtils.jar"/>
+          <arg value="-jar"/>
+          <arg value="com.yq.file.FileHelper"/>
+          <arg value="${INPUT_PROPS}"/>
+      </execution>
+    </step>
+
+    <step name="create a folder">
+      <description>execute the folder-creation script</description>
+      <properties>
+        <property name="foldername" label = "Directory name" type="input" description="The name of the folder."/>
+      </properties>
+      <execution type="java">
+          <arg value="-cp"/>
+          <arg path="lib/log4j.jar;lib/commons-lang3.jar;lib/fileUtils.jar"/>
+          <arg value="-jar"/>
+          <arg value="com.yq.folder.FolderHelper"/>
+          <arg value="${INPUT_PROPS}"/>
+      </execution>
+    </step>
+</body>
+</plugin>
