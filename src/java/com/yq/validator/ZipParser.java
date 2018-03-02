@@ -13,6 +13,7 @@ import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.List;
 
+import org.apache.commons.io.FileUtils;
 import org.dom4j.Attribute;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -22,25 +23,22 @@ import org.dom4j.io.SAXReader;
 public class ZipParser {
 
     public static void main(String[] args) {
-        String zipname = "src\\plugins\\FileUtils.zip";
-        Path path = Paths.get(zipname);
+        String zipFileName = "src\\plugins\\FileUtils.zip";
+        String unzipDirName = "output/FileUtils";
 
         try {
-            FileSystem zipfs = FileSystems.newFileSystem(Paths.get(zipname), null);
-
+            File unzipDir = new File(unzipDirName);
+            if (unzipDir.exists()) {
+                FileUtils.deleteDirectory(unzipDir);
+                System.out.printf("Delete existing dir %s\n", unzipDir);
+            }
+            unzip(zipFileName, unzipDirName);
         }
         catch (IOException e) {
             e.printStackTrace();
         }
 
-        try {
-            unzip(zipname, "output/FileUtils");
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        parsePluginXml("output/FileUtils/plugin.xml");
+        parsePluginXml(unzipDirName+ "/plugin.xml");
     }
 
     /**
@@ -146,7 +144,7 @@ public class ZipParser {
                         //<property name="filename" label = "File Name" type="input" defaultValue="file1.txt" description="The name of the file."/>
                         Element pElement = (Element)object;
                         String propName = pElement.attribute("name").getValue();
-                        String labelName = pElement.attribute("label").getValue();
+                        String propLabel = pElement.attribute("label").getValue();
                         String proptype = pElement.attribute("type").getValue();
                         Attribute defValAttr = pElement.attribute("defaultValue");
                         String propDefaultValue = "";
@@ -157,7 +155,7 @@ public class ZipParser {
 
                         StringBuffer propValue = new StringBuffer();
                         propValue.append("propName:["+ propName + "], ");
-                        propValue.append("labelName:["+ labelName + "], ");
+                        propValue.append("propLabel:["+ propLabel + "], ");
                         propValue.append("proptype:["+ proptype + "], ");
                         propValue.append("propDefaultValue:["+ propDefaultValue + "], ");
                         propValue.append("propDesc:["+ propDesc + "] ");
