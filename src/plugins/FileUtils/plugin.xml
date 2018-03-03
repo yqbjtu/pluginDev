@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<plugin id="com.quickcd.plugin.FileUtils" name="FileUtils" version="1">
+<plugin id="com.quickcd.plugin.FileUtils" name="FileUtils" version="2">
 <head>
     <description>
      a java type plugin to create file or folder 
@@ -12,11 +12,11 @@
       <properties>
         <property name="filename" label = "File Name" type="input" defaultValue="file1.txt" description="The name of the file."/>
         <property name="content" label = "Content" type="input" description="The content of the file."/>
+        <property name="overwrite" label = "Overwrite if exists" type="checkbox" description="when checked, if file already exists, file will be overwritten."/>
       </properties>
       <execution type="java">
           <arg value="-cp"/>
           <arg path="lib/log4j.jar;lib/commons-lang3.jar;lib/fileUtils.jar"/>
-          <arg value="-jar"/>
           <arg value="com.yq.file.FileHelper"/>
           <arg value="${INPUT_PROPS}"/>
       </execution>
@@ -30,7 +30,6 @@
       <execution type="java">
           <arg value="-cp"/>
           <arg path="lib/log4j.jar;lib/commons-lang3.jar;lib/fileUtils.jar"/>
-          <arg value="-jar"/>
           <arg value="com.yq.folder.FolderHelper"/>
           <arg value="${INPUT_PROPS}"/>
       </execution>

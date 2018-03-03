@@ -13,7 +13,6 @@
       <execution type="java">
           <arg value="-cp"/>
           <arg path="lib/log4j.jar;lib/commons-lang3.jar;lib/echo.jar"/>
-          <arg value="-jar"/>
           <arg value="com.yq.echo.echoDemo"/>
           <arg value="${INPUT_PROPS}"/>
       </execution>

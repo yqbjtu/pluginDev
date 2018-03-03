@@ -21,10 +21,10 @@ import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
 public class ZipParser {
+    static String zipFileName = "src\\plugins\\FileUtils.zip";
+    static String unzipDirName = "output/FileUtils";
 
     public static void main(String[] args) {
-        String zipFileName = "src\\plugins\\FileUtils.zip";
-        String unzipDirName = "output/FileUtils";
 
         try {
             File unzipDir = new File(unzipDirName);
@@ -160,43 +160,84 @@ public class ZipParser {
                         propValue.append("propDefaultValue:["+ propDefaultValue + "], ");
                         propValue.append("propDesc:["+ propDesc + "] ");
                         System.out.println("    property element:" + propValue);
+                        
                     }
                 }
 
                 Element exeElement = element.element("execution");
                 /*
                  * <execution type="java">
-          <arg value="-cp"/>
-          <arg path="lib/log4j.jar;lib/commons-lang3.jar;lib/fileUtils.jar"/>
-          <arg value="-jar"/>
-          <arg value="com.yq.folder.FolderHelper"/>
-          <arg value="${INPUT_PROPS}"/>
-      </execution>
+                     <arg value="-cp"/>
+                     <arg path="lib/log4j.jar;lib/commons-lang3.jar;lib/fileUtils.jar"/>
+                     <arg value="-jar"/>
+                     <arg value="com.yq.folder.FolderHelper"/>
+                     <arg value="${INPUT_PROPS}"/>
+                   </execution>
                  */
                 if (exeElement != null) {
                     Attribute typeAttr = exeElement.attribute("type");
                     StringBuffer execValue = new StringBuffer();
-                    execValue.append("execution type attr :["+ typeAttr.getText() + "] ");
-                    List argList = propsElement.elements("arg");
+                    execValue.append("type attr:["+ typeAttr.getText() + "] ");
+                    List argList = exeElement.elements("arg");
 
                     for(Object argObj : argList) {
                         Element argElement = (Element)argObj;
-                        Attribute valueAttr = exeElement.attribute("value");
-                        Attribute pathAttr = exeElement.attribute("path");
+                        Attribute valueAttr = argElement.attribute("value");
+                        Attribute pathAttr = argElement.attribute("path");
                         if (valueAttr != null) {
-                            execValue.append("execution value attr :["+ valueAttr.getText() + "] ");
+                            execValue.append("value attr:["+ valueAttr.getText() + "] ");
                         }
                         if (pathAttr != null) {
-                            execValue.append("execution path attr :["+ pathAttr.getText() + "] ");
+                            execValue.append("path attr:["+ pathAttr.getText() + "] ");
                         }
                     }
                     System.out.println("    execution element:" + execValue);
+                    generateCmdWithArgs(exeElement);
                 }
+
 
                 System.out.println("step element:" + stepValue);
             }
         }
     }
 
+    static private String generateCmdWithArgs(Element exeElement) {
+        StringBuffer cmd = new StringBuffer();
+        Attribute typeAttr = exeElement.attribute("type");
+        cmd.append(typeAttr.getText());
+
+        List<Element> argList = exeElement.elements("arg");
+
+        for(Object argObj : argList) {
+            Element argElement = (Element)argObj;
+            Attribute valueAttr = argElement.attribute("value");
+            Attribute pathAttr = argElement.attribute("path");
+            if (valueAttr != null) {
+                cmd.append(" " + valueAttr.getText());
+            }
+            if (pathAttr != null) {
+                String libs = pathAttr.getText();
+                //lis will be like 'lib/log4j.jar;lib/commons-lang3.jar;lib/fileUtils.jar'
+                String[] jars = libs.split(";");
+                if (jars.length != 0) {
+                    cmd.append(" ");
+                    for(String jar : jars) {
+                        //if windows, use semicolon, if linux, use colon
+                        String osName = System.getProperty("os.name").toLowerCase(); 
+                        if (osName.contains("windows")) {
+                            cmd.append(unzipDirName+ "/" + jar+ ";");
+                        }
+                        else {
+                            cmd.append(unzipDirName+ "/" + jar+ ":");
+                        }
+                    }
+                    cmd.delete(cmd.length()-1, cmd.length());
+                 }
+            }
+        }
+
+        System.out.println("cmd:" + cmd);
+        return cmd.toString();
+    }
 
 }
