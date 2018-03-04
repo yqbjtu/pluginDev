@@ -35,14 +35,17 @@ public class FileHelper {
         }
         String filename = props.getProperty("filename");
         String content = props.getProperty("content");
-        Boolean overwrite = true;
-        if (!"true".equals(props.getProperty("overwrite").toLowerCase()) ) {
-            overwrite = false;
+        Boolean overwrite = false;
+        String overwriteString = props.getProperty("overwrite").toLowerCase();
+        //checkbox 的默认值是on，当你在网页找那个选中获取checkbox的值，默认为on
+        if ("true".equals(overwriteString) || "on".equals(overwriteString)) {
+            overwrite = true;
         }
 
         System.out.println(filename);
         System.out.println(content);
-        System.out.println(overwrite);
+        System.out.println("overwriteString:" + overwriteString);
+        System.out.println("overwrite:" + overwrite);
         System.out.println();
 
         File newfile = new File(filename);

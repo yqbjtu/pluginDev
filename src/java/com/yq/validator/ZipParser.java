@@ -86,8 +86,6 @@ public class ZipParser {
       }
     }
 
-/*
- */
     static public void parsePluginXml(String file) {
         SAXReader reader = new SAXReader();
         File xmlFile = new File(file);
@@ -145,7 +143,7 @@ public class ZipParser {
                         Element pElement = (Element)object;
                         String propName = pElement.attribute("name").getValue();
                         String propLabel = pElement.attribute("label").getValue();
-                        String proptype = pElement.attribute("type").getValue();
+                        String propType = pElement.attribute("type").getValue();
                         Attribute defValAttr = pElement.attribute("defaultValue");
                         String propDefaultValue = "";
                         if (defValAttr != null) {
@@ -156,7 +154,7 @@ public class ZipParser {
                         StringBuffer propValue = new StringBuffer();
                         propValue.append("propName:["+ propName + "], ");
                         propValue.append("propLabel:["+ propLabel + "], ");
-                        propValue.append("proptype:["+ proptype + "], ");
+                        propValue.append("propType:["+ propType + "], ");
                         propValue.append("propDefaultValue:["+ propDefaultValue + "], ");
                         propValue.append("propDesc:["+ propDesc + "] ");
                         System.out.println("    property element:" + propValue);

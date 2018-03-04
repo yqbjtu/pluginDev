@@ -8,6 +8,7 @@
     <step name="step1-echo-script">
       <description>execute the echo of property script</description>
       <properties>
+        <!-- 1 is text, 2 is checkbox, 3 is select, 4 is textarea -->
         <property name="scriptBody" label = "Script Body" type="input" description="The body of the script."/>
       </properties>
       <execution type="java">

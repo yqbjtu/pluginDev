@@ -10,6 +10,7 @@
     <step name="create a file">
       <description>execute the file-creation script</description>
       <properties>
+        <!-- 1 is text, 2 is checkbox, 3 is select, 4 is textarea -->
         <property name="filename" label = "File Name" type="input" defaultValue="file1.txt" description="The name of the file."/>
         <property name="content" label = "Content" type="input" description="The content of the file."/>
         <property name="overwrite" label = "Overwrite if exists" type="checkbox" description="when checked, if file already exists, file will be overwritten."/>
